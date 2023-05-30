@@ -1,9 +1,3 @@
-const express = require("express");
-
-const { users_schema } = require("../../data/db_v1");
-
-const api_v1 = express.Router();
-
 /**
  * @swagger
  * /api/v1/users:
@@ -18,10 +12,62 @@ const api_v1 = express.Router();
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/User'
+ *                 $ref: '#/components/schemas/user'
  */
-api_v1.get("/users", (_req, res) => {
-    res.json(users_schema);
-});
+module.exports.get = function (_req, res) {
+    res.json({ result: "get_all" });
+};
 
-module.exports = api_v1;
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   get:
+ *     summary: Retrieve user
+ *     description: Get user by id.
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/user'
+ */
+module.exports.getById = function (_req, res) {
+    res.json({ result: "get_by_id" });
+};
+
+/**
+ * @swagger
+ * /api/v1/users:
+ *   post:
+ *     summary: Retrieve user
+ *     description: Get user by id.
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/user'
+ */
+module.exports.create = function(_req, res) {
+    res.json({ result: "created" });
+};
+
+/**
+ * @swagger
+ * /api/v1/users/{id}:
+ *   delete:
+ *     summary: Retrieve user
+ *     description: Get user by id.
+ *     responses:
+ *       200:
+ *         description: A list of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *                $ref: '#/components/schemas/user'
+ */
+module.exports.delete = function(_req, res) {
+    res.json({ result: "deleted" });
+};
