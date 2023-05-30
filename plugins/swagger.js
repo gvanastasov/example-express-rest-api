@@ -3,7 +3,7 @@ const swaggerJsdoc  = require('swagger-jsdoc'),
 
 const { getSwaggerOptions } = require('../config/swagger.conf');
 
-const swagger = function(app) {
+const plugin = function(app) {
     const swaggerSpecV1 = swaggerJsdoc(getSwaggerOptions('v1'));
 
     app.get('/api-docs/v1.json', (req, res) => {
@@ -26,4 +26,4 @@ const swagger = function(app) {
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(null, swaggerUIOptions));
 }
 
-module.exports = swagger
+module.exports = plugin
