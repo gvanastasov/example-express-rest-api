@@ -7,6 +7,6 @@ const app = express();
 install(app, "swagger");
 install(app, "resource");
 
-app.resource("/api/v1/users", require("./controllers/v1/users-controller"));
+app.use("/api/v1", require("./controllers/v1"));
 
 module.exports = { app };
