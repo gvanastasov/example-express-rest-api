@@ -1,5 +1,6 @@
 # example-express-web-api
- Example restful api, with swagger and in-memory mongodb.
+
+Example restful api, with swagger and in-memory mongodb.
 
 ## Getting started
 

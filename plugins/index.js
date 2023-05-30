@@ -1,4 +1,4 @@
-const install = function(app, id) {
+const install = function (app, id) {
     let plugin = require(`./${id}.js`);
     if (plugin) {
         plugin(app);

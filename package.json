@@ -1,22 +1,29 @@
 {
-  "name": "example-express-web-api",
-  "version": "1.0.0",
-  "description": "Example restful api, with swagger and in-memory mongodb.",
-  "main": "app.js",
-  "scripts": {
-    "start": "node ./bin/www"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@faker-js/faker": "^8.0.2",
-    "express": "^4.18.2",
-    "mongoose": "^7.2.2",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.6.3"
-  },
-  "devDependencies": {
-    "mongodb-memory-server": "^8.12.2"
-  }
+    "name": "example-express-web-api",
+    "version": "1.0.0",
+    "description": "Example restful api, with swagger and in-memory mongodb.",
+    "main": "app.js",
+    "scripts": {
+        "start": "node ./bin/www",
+        "format:check": "prettier --check .",
+        "format:write": "prettier --write .",
+        "lint:check": "eslint .",
+        "lint:fix": "eslint --fix ."
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@faker-js/faker": "^8.0.2",
+        "express": "^4.18.2",
+        "mongoose": "^7.2.2",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.3"
+    },
+    "devDependencies": {
+        "eslint": "^8.41.0",
+        "eslint-config-prettier": "^8.8.0",
+        "mongodb-memory-server": "^8.12.2",
+        "prettier": "^2.8.8"
+    }
 }

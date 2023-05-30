@@ -5,9 +5,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch API",
-            "skipFiles": [
-                "<node_internals>/**"
-            ],
+            "skipFiles": ["<node_internals>/**"],
             "program": "${workspaceFolder}\\bin\\www"
         }
     ]

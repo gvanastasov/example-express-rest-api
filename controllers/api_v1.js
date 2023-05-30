@@ -1,6 +1,6 @@
-const express = require('express');
+const express = require("express");
 
-const { users_schema } = require('../data/db_v1');
+const { users_schema } = require("../data/db_v1");
 
 const api_v1 = express.Router();
 
@@ -20,8 +20,8 @@ const api_v1 = express.Router();
  *               items:
  *                 $ref: '#/components/schemas/User'
  */
-api_v1.get('/users', (_req, res) => {
-    res.json(users_schema)
+api_v1.get("/users", (_req, res) => {
+    res.json(users_schema);
 });
 
 module.exports = api_v1;

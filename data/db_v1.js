@@ -1,6 +1,6 @@
-'use strict'
+"use strict";
 
-const { faker } = require('@faker-js/faker');
+const { faker } = require("@faker-js/faker");
 
 /**
  * @swagger
