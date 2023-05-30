@@ -12,7 +12,7 @@ const definition = {
   info: {
     title: "Example Express Swagger",
     description:
-      "This is an example web api made with Express and documented with Swagger",
+      "Example restful api, with swagger and in-memory mongodb.",
   },
   servers: [
     {
