@@ -3,7 +3,7 @@ const sqlite3   = require("better-sqlite3"),
     { faker }   = require("@faker-js/faker");
 
 /**
- * @type {sql.Database}
+ * @type {sqlite3.Database}
  */
 let db = new sqlite3(":memory:", { verbose: console.log });
 
