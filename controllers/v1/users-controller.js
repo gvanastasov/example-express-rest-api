@@ -1,4 +1,5 @@
 const { query } = require("../../db");
+
 /**
  * @swagger
  * /api/v1/users:
@@ -64,7 +65,7 @@ module.exports.getById = function (req, res, next) {
         })
         .catch((err) => {
             next(err);
-        });;
+        });
 };
 
 /**
@@ -89,16 +90,34 @@ module.exports.create = function(_req, res) {
  * @swagger
  * /api/v1/users/{id}:
  *   delete:
- *     summary: Retrieve user
- *     description: Get user by id.
+ *     summary: Delete user by ID
+ *     description: Delete a user by their ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: User ID
+ *         schema:
+ *           type: integer
+ *           format: int64
  *     responses:
- *       200:
- *         description: A list of users
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/user'
+ *       204:
+ *         description: Operation successful.
+ *       404:
+ *         description: User not found.
  */
-module.exports.delete = function(_req, res) {
-    res.json({ result: "deleted" });
+module.exports.delete = function(req, res, next) {
+    query("users")
+        .where("id", req.params.id)
+        .del()
+        .then((deletedCount) => {
+            if (deletedCount === 0) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            res.sendStatus(204);
+        })
+        .catch((err) => {
+            next(err);
+        });
 };
