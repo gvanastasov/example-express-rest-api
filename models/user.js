@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-
 /**
  * @swagger
  * components:
@@ -7,6 +5,9 @@ const mongoose = require("mongoose");
  *     user:
  *       type: object
  *       properties:
+ *         id:
+ *           type: string
+ *           description: Unique identifier.
  *         username:
  *           type: string
  *           description: The first name of the user.
@@ -14,14 +15,14 @@ const mongoose = require("mongoose");
  *           type: string
  *           description: The email of the user.
  *       example:
+ *         id: 1
  *         username: admin
  *         email: admin@mail.com
  */
-const userSchema = new mongoose.Schema({
-    username: { type: String, required: true },
-    email: { type: String, required: true },
-});
+const User = function(id = "", username = "", email = "") {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+};
 
-const model = mongoose.model("user", userSchema);
-
-module.exports = model;
+module.exports = User;

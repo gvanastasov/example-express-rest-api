@@ -1,3 +1,5 @@
+const { query } = require("../../db");
+
 /**
  * @swagger
  * /api/v1/users:
@@ -15,6 +17,9 @@
  *                 $ref: '#/components/schemas/user'
  */
 module.exports.get = function (_req, res) {
+    query("users").select().then((x) => {
+        console.log(x);
+    });
     res.json({ result: "get_all" });
 };
 

@@ -8,7 +8,7 @@ const jsDocs = [
         path.resolve(__dirname, "..", "controllers")
     ) + "\\{version}\\*.js",
     path.relative(processDirectory, path.resolve(__dirname, "..", "models")) +
-        "\\{version}\\*.js",
+        "\\*.js",
 ];
 
 const definition = {
