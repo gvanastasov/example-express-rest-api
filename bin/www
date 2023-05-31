@@ -1,15 +1,22 @@
 #!/usr/bin/env node
 const { app } = require("../app.js");
-const { initDb } = require("../db/index.js");
+const { startDb, stopDb } = require("../db/index.js");
 
-initDb()
-    .then(() => {
-        const port = normalizePort(process.env.PORT || "3000");
+startDb();
+
+const port = normalizePort(process.env.PORT || "3000");
       
-        app.listen(port, () => {
-            console.log(`Example app listening on port ${port}`);
-        });
-    });
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`);
+});
+
+process.on("exit", () => {
+    console.log("Example app stopped.");
+    stopDb();
+});
+process.on("SIGHUP", () => process.exit(128 + 1));
+process.on("SIGINT", () => process.exit(128 + 2));
+process.on("SIGTERM", () => process.exit(128 + 15));
 
 /**
  * Normalize a port into a number, string, or false.
