@@ -7,6 +7,7 @@ const app = express();
 install(app, "swagger");
 install(app, "resource");
 
+app.use(express.json());
 app.use("/api/v1", require("./controllers/v1"));
 
 module.exports = { app };
