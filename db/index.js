@@ -1,31 +1,30 @@
-const sql       = require("better-sqlite3"),
+const sqlite3   = require("better-sqlite3"),
     knex        = require("knex"),
     { faker }   = require("@faker-js/faker");
+
 /**
  * @type {sql.Database}
  */
-let db = null;
+let db = new sqlite3(":memory:", { verbose: console.log });
 
 /**
  * @type {knex.Knex}
  */
-let query = null;
+let query = knex({
+    client: "better-sqlite3",
+    dialect: "sqlite3",
+    useNullAsDefault: true,
+    connection: {
+        filename: ":memory:"
+    }
+});
 
-const startDb = function() {
+const startDb = async () => {
     try {
-        db = new sql(":memory:", { verbose: console.log });
-        query = knex({
-            client: "better-sqlite3",
-            dialect: "sqlite3",
-            useNullAsDefault: true,
-            connection: {
-                filename: ":memory:"
-            }
-        });
         console.log("Connected to the in-memory SQlite database.");
         
-        initDb();
-        seedDb();
+        await createSchema();
+        await seedDb();
     } catch (err) {
         console.error(err?.message);
     }
@@ -46,8 +45,8 @@ const stopDb = function() {
     }
 };
 
-const initDb = function() {
-    query
+const createSchema = async function() {
+    await query
         .schema
         .createTable("users", table => {
             table.increments("id");
@@ -56,8 +55,8 @@ const initDb = function() {
         });
 };
 
-const seedDb = function() {
-    query("users")
+const seedDb = async function() {
+    await query("users")
         .insert(
             Array.from(
                 { length: 10 }, () => ({
