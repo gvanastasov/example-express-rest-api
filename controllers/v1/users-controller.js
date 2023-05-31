@@ -69,6 +69,76 @@ module.exports.getById = function (req, res, next) {
 };
 
 /**
+ * @remarks
+ *      - no sanity checks on user input, beyond the purpose of example.
+ * @swagger
+ * /api/v1/users/{id}:
+ *   patch:
+ *     summary: Update user
+ *     description: Update an existing user by ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: The ID of the user to update.
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/userPatchRequestBody'
+ *     responses:
+ *       204:
+ *         description: User updated successfully.
+ *       404:
+ *         description: User not found.
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     userPatchRequestBody:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The updated username of the user.
+ *         email:
+ *           type: string
+ *           description: The updated email address of the user.
+ */
+
+/**
+ * @remarks
+ *      - no sanity checks on user input, beyound purpose of example.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+module.exports.update = function(req, res, next) {
+    const { username, email } = req.body;
+    
+    query("users")
+        .where({ id: req.params.id })
+        .first()
+        .update({ username, email })
+        .then((updatedCount) => {
+            if (updatedCount === 0) {
+                return res.status(404).json({ error: "User not found" });
+            }
+
+            res.sendStatus(204);
+        })
+        .catch((err) => {
+            next(err);
+        });
+};
+
+/**
  * @swagger
  * /api/v1/users:
  *   post:
