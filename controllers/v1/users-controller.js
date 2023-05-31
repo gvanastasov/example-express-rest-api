@@ -74,16 +74,67 @@ module.exports.getById = function (req, res, next) {
  *   post:
  *     summary: Retrieve user
  *     description: Get user by id.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/userRequestBody'
  *     responses:
- *       200:
- *         description: A list of users
- *         content:
- *           application/json:
- *             schema:
- *                $ref: '#/components/schemas/user'
+ *       201:
+ *         description: User created.
+ *       404:
+ *         description: Username already exists.
+*/
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     userRequestBody:
+ *       type: object
+ *       properties:
+ *         username:
+ *           type: string
+ *           description: The first name of the user.
+ *         email:
+ *           type: string
+ *           description: The email of the user.
+ *       example:
+ *         username: admin
+ *         email: admin@mail.com
+*/
+
+/**
+ * @remarks
+ *      - no sanity checks on user input, beyound purpose of example.
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
  */
-module.exports.create = function(_req, res) {
-    res.json({ result: "created" });
+module.exports.create = function(req, res, next) {
+    const { username, email } = req.body;
+
+    query("users")
+        .where("username", username)
+        .first()
+        .then((existingUser) => {
+            if (existingUser) {
+                return res.status(404).json({ error: "Username already taken." });
+            }
+
+            query("users")
+                .insert({ username, email })
+                .returning("*")
+                .then(([newUser]) => {
+                    res.status(201).json(newUser);
+                })
+                .catch((err) => {
+                    next(err);
+                });
+        });
+
 };
 
 /**
