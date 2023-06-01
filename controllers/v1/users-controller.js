@@ -69,8 +69,6 @@ module.exports.getById = async function (req, res, next) {
 };
 
 /**
- * @remarks
- *      - no sanity checks on user input, beyond the purpose of example.
  * @swagger
  * /api/v1/users/{id}:
  *   patch:
@@ -142,8 +140,8 @@ module.exports.update = async function(req, res, next) {
  * @swagger
  * /api/v1/users:
  *   post:
- *     summary: Retrieve user
- *     description: Get user by id.
+ *     summary: Create user
+ *     description: Create user by providing email and username.
  *     requestBody:
  *       required: true
  *       content:
