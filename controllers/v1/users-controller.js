@@ -55,7 +55,7 @@ module.exports.getById = async function (req, res, next) {
     try {
         const user = await query(ENTITY.USER)
             .select()
-            .where("id", "=", req.params.id)
+            .where({ id: req.params.id })
             .first();
 
         if (user) {
@@ -186,7 +186,7 @@ module.exports.create = async function(req, res, next) {
 
     try {
         const existingUser = await query(ENTITY.USER)
-            .where("username", username)
+            .where({ username: username })
             .first();
         if (existingUser) {
             return res.status(404).json({ error: "Username already taken." });
@@ -225,7 +225,7 @@ module.exports.create = async function(req, res, next) {
 module.exports.delete = async function(req, res, next) {
     try {
         const deletedCount = await query(ENTITY.USER)
-            .where("id", req.params.id)
+            .where({ id: req.params.id })
             .del();
 
         if (deletedCount === 0) {
