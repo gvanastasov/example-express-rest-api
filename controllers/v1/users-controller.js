@@ -1,5 +1,12 @@
 const { query, ENTITY } = require("../../db");
 const { httpStatusCodes } = require("../../utils/http-status-codes");
+
+/**
+ * @typedef {import('express').Request} ExpressRequest
+ * @typedef {import('express').Response} ExpressResponse
+ * @typedef {import('express').NextFunction} ExpressNext
+ */
+
 /**
  * @swagger
  * /api/v1/users:
@@ -15,6 +22,14 @@ const { httpStatusCodes } = require("../../utils/http-status-codes");
  *               type: array
  *               items:
  *                 $ref: '#/components/schemas/user'
+ */
+
+/**
+ * @description Retrieve all users.
+ * 
+ * @param {ExpressRequest} req 
+ * @param {ExpressResponse} res 
+ * @param {ExpressNext} next 
  */
 module.exports.get = async function (_req, res, next) {
     try {
@@ -50,6 +65,14 @@ module.exports.get = async function (_req, res, next) {
  *               $ref: '#/components/schemas/user'
  *       404:
  *         description: User not found
+ */
+
+/**
+ * @description Retrieve user by id.
+ * 
+ * @param {ExpressRequest} req 
+ * @param {ExpressResponse} res 
+ * @param {ExpressNext} next 
  */
 module.exports.getById = async function (req, res, next) {
     try {
@@ -112,12 +135,13 @@ module.exports.getById = async function (req, res, next) {
  */
 
 /**
+ * @description Update user by id.
  * @remarks
  *      - no sanity checks on user input, beyound purpose of example.
  * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {ExpressRequest} req 
+ * @param {ExpressResponse} res 
+ * @param {ExpressNext} next 
  */
 module.exports.update = async function(req, res, next) {
     const { username, email } = req.body;
@@ -178,12 +202,13 @@ module.exports.update = async function(req, res, next) {
 */
 
 /**
+ * @description Create user.
  * @remarks
  *      - no sanity checks on user input, beyound purpose of example.
  * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @param {ExpressRequest} req 
+ * @param {ExpressResponse} res 
+ * @param {ExpressNext} next 
  */
 module.exports.create = async function(req, res, next) {
     const { username, email } = req.body;
@@ -230,6 +255,16 @@ module.exports.create = async function(req, res, next) {
  *         description: Operation successful.
  *       404:
  *         description: User not found.
+ */
+
+/**
+ * @description Delete user by id.
+ * @remarks
+ *      - no sanity checks on user input, beyound purpose of example.
+ * 
+ * @param {ExpressRequest} req 
+ * @param {ExpressResponse} res 
+ * @param {ExpressNext} next 
  */
 module.exports.delete = async function(req, res, next) {
     try {
