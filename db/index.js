@@ -19,6 +19,10 @@ let query = knex({
     }
 });
 
+const ENTITY = {
+    USER: "user",
+};
+
 const startDb = async () => {
     try {
         console.log("Connected to the in-memory SQlite database.");
@@ -48,7 +52,7 @@ const stopDb = function() {
 const createSchema = async function() {
     await query
         .schema
-        .createTable("users", table => {
+        .createTable(ENTITY.USER, table => {
             table.increments("id");
             table.string("username");
             table.string("email");
@@ -56,7 +60,7 @@ const createSchema = async function() {
 };
 
 const seedDb = async function() {
-    await query("users")
+    await query(ENTITY.USER)
         .insert(
             Array.from(
                 { length: 10 }, () => ({
@@ -67,4 +71,4 @@ const seedDb = async function() {
         );
 };
 
-module.exports = { query, startDb, stopDb };
+module.exports = { query, startDb, stopDb, ENTITY };

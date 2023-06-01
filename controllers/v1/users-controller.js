@@ -1,4 +1,4 @@
-const { query } = require("../../db");
+const { query, ENTITY } = require("../../db");
 
 /**
  * @swagger
@@ -18,7 +18,7 @@ const { query } = require("../../db");
  */
 module.exports.get = async function (_req, res, next) {
     try {
-        let users = await query("users")
+        let users = await query(ENTITY.USER)
             .select();
     
         res.json(users);
@@ -53,7 +53,7 @@ module.exports.get = async function (_req, res, next) {
  */
 module.exports.getById = async function (req, res, next) {
     try {
-        const user = await query("users")
+        const user = await query(ENTITY.USER)
             .select()
             .where("id", "=", req.params.id)
             .first();
@@ -121,7 +121,7 @@ module.exports.update = async function(req, res, next) {
     const { username, email } = req.body;
     
     try {
-        const updatedCount = await query("users")
+        const updatedCount = await query(ENTITY.USER)
             .where({ id: req.params.id })
             .first()
             .update({ username, email });
@@ -185,14 +185,14 @@ module.exports.create = async function(req, res, next) {
     const { username, email } = req.body;
 
     try {
-        const existingUser = await query("users")
+        const existingUser = await query(ENTITY.USER)
             .where("username", username)
             .first();
         if (existingUser) {
             return res.status(404).json({ error: "Username already taken." });
         }
 
-        const [newUser] = await query("users")
+        const [newUser] = await query(ENTITY.USER)
             .insert({ username, email })
             .returning("*");
         res.status(201).json(newUser);
@@ -224,7 +224,7 @@ module.exports.create = async function(req, res, next) {
  */
 module.exports.delete = async function(req, res, next) {
     try {
-        const deletedCount = await query("users")
+        const deletedCount = await query(ENTITY.USER)
             .where("id", req.params.id)
             .del();
 
