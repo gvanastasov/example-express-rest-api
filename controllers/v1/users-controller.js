@@ -1,5 +1,5 @@
 const { query, ENTITY } = require("../../db");
-
+const { httpStatusCodes } = require("../../utils/http-status-codes");
 /**
  * @swagger
  * /api/v1/users:
@@ -61,7 +61,9 @@ module.exports.getById = async function (req, res, next) {
         if (user) {
             res.json(user);
         } else {
-            res.status(404).json({ error: "User not found" });
+            res
+                .status(httpStatusCodes.SUCCESS.OK)
+                .json({ error: "User not found" });
         }
     } catch (err) {
         next(err);
@@ -127,10 +129,12 @@ module.exports.update = async function(req, res, next) {
             .update({ username, email });
 
         if (updatedCount === 0) {
-            return res.status(404).json({ error: "User not found" });
+            return res
+                .status(httpStatusCodes.CLIENT_ERROR.NOT_FOUND)
+                .json({ error: "User not found" });
         }
 
-        res.sendStatus(204);
+        res.sendStatus(httpStatusCodes.SUCCESS.NO_CONTENT);
     } catch (err) {
         next(err);
     }
@@ -189,13 +193,18 @@ module.exports.create = async function(req, res, next) {
             .where({ username: username })
             .first();
         if (existingUser) {
-            return res.status(404).json({ error: "Username already taken." });
+            return res
+                .status(httpStatusCodes.CLIENT_ERROR.NOT_FOUND)
+                .json({ error: "Username already taken." });
         }
 
         const [newUser] = await query(ENTITY.USER)
             .insert({ username, email })
             .returning("*");
-        res.status(201).json(newUser);
+        
+        res
+            .status(httpStatusCodes.SUCCESS.CREATED)
+            .json(newUser);
 
     } catch (err) {
         next(err);
@@ -229,10 +238,13 @@ module.exports.delete = async function(req, res, next) {
             .del();
 
         if (deletedCount === 0) {
-            return res.status(404).json({ error: "User not found" });
+            return res
+                .status(httpStatusCodes.CLIENT_ERROR.NOT_FOUND)
+                .json({ error: "User not found" });
         }
 
-        res.sendStatus(204);
+        res
+            .sendStatus(httpStatusCodes.SUCCESS.NO_CONTENT);
     } catch (err) {
         next(err);
     }
