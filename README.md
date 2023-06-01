@@ -1,4 +1,4 @@
-# **Example Express Web API**
+# **Example Express REST API**
 
 This repository contains an example RESTful API built with Express.js, Swagger, and an in-memory SQLite database. It serves as a boilerplate for creating scalable and maintainable web APIs.
 
