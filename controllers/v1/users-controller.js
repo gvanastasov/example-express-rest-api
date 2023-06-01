@@ -16,15 +16,15 @@ const { query } = require("../../db");
  *               items:
  *                 $ref: '#/components/schemas/user'
  */
-module.exports.get = function (_req, res, next) {
-    query("users")
-        .select()
-        .then((x) => {
-            res.json(x);
-        })
-        .catch((err) => {
-            next(err);
-        });
+module.exports.get = async function (_req, res, next) {
+    try {
+        let users = await query("users")
+            .select();
+    
+        res.json(users);
+    } catch(err) {
+        next(err);
+    }
 };
 
 /**
@@ -51,21 +51,21 @@ module.exports.get = function (_req, res, next) {
  *       404:
  *         description: User not found
  */
-module.exports.getById = function (req, res, next) {
-    query("users")
-        .select()
-        .where("id", "=", req.params.id)
-        .first()
-        .then((user) => {
-            if (user) {
-                res.json(user);
-            } else {
-                res.status(404).json({ error: "User not found" });
-            }
-        })
-        .catch((err) => {
-            next(err);
-        });
+module.exports.getById = async function (req, res, next) {
+    try {
+        const user = await query("users")
+            .select()
+            .where("id", "=", req.params.id)
+            .first();
+
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ error: "User not found" });
+        }
+    } catch (err) {
+        next(err);
+    }
 };
 
 /**
@@ -119,23 +119,23 @@ module.exports.getById = function (req, res, next) {
  * @param {*} res 
  * @param {*} next 
  */
-module.exports.update = function(req, res, next) {
+module.exports.update = async function(req, res, next) {
     const { username, email } = req.body;
     
-    query("users")
-        .where({ id: req.params.id })
-        .first()
-        .update({ username, email })
-        .then((updatedCount) => {
-            if (updatedCount === 0) {
-                return res.status(404).json({ error: "User not found" });
-            }
+    try {
+        const updatedCount = await query("users")
+            .where({ id: req.params.id })
+            .first()
+            .update({ username, email });
 
-            res.sendStatus(204);
-        })
-        .catch((err) => {
-            next(err);
-        });
+        if (updatedCount === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    }
 };
 
 /**
@@ -183,28 +183,25 @@ module.exports.update = function(req, res, next) {
  * @param {*} res 
  * @param {*} next 
  */
-module.exports.create = function(req, res, next) {
+module.exports.create = async function(req, res, next) {
     const { username, email } = req.body;
 
-    query("users")
-        .where("username", username)
-        .first()
-        .then((existingUser) => {
-            if (existingUser) {
-                return res.status(404).json({ error: "Username already taken." });
-            }
+    try {
+        const existingUser = await query("users")
+            .where("username", username)
+            .first();
+        if (existingUser) {
+            return res.status(404).json({ error: "Username already taken." });
+        }
 
-            query("users")
-                .insert({ username, email })
-                .returning("*")
-                .then(([newUser]) => {
-                    res.status(201).json(newUser);
-                })
-                .catch((err) => {
-                    next(err);
-                });
-        });
+        const [newUser] = await query("users")
+            .insert({ username, email })
+            .returning("*");
+        res.status(201).json(newUser);
 
+    } catch (err) {
+        next(err);
+    }
 };
 
 /**
@@ -227,18 +224,18 @@ module.exports.create = function(req, res, next) {
  *       404:
  *         description: User not found.
  */
-module.exports.delete = function(req, res, next) {
-    query("users")
-        .where("id", req.params.id)
-        .del()
-        .then((deletedCount) => {
-            if (deletedCount === 0) {
-                return res.status(404).json({ error: "User not found" });
-            }
+module.exports.delete = async function(req, res, next) {
+    try {
+        const deletedCount = await query("users")
+            .where("id", req.params.id)
+            .del();
 
-            res.sendStatus(204);
-        })
-        .catch((err) => {
-            next(err);
-        });
+        if (deletedCount === 0) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.sendStatus(204);
+    } catch (err) {
+        next(err);
+    }
 };
